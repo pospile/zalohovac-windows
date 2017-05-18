@@ -1,7 +1,9 @@
 var socket = require('socket.io-client')('http://localhost:2579');
 const notifier = require('node-notifier');
 var storage = require('node-persist');
+var path = require("path");
 storage.initSync();
+
 
 socket.on('connect', function(){
     console.log("System is connected to main server");
@@ -35,6 +37,13 @@ socket.on('auth', function(data){
         'title': 'Device authorized',
         'message': 'This device was just authorized againts backup server!'
     });
+});
+socket.on('backup', function(data){
+    notifier.notify({
+        'title': 'Your device is in backup mode',
+        'message': 'This device is now in backup mode, please do not turn off the power!'
+    });
+    require("./backup.js").Backup(path.resolve("C:\\Users\\vpo\\Desktop\\old\\rrc"));
 });
 socket.on('disconnect', function(){
     console.log("System disconnected, check internet connetion please!");

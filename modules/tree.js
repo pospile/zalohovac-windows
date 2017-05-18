@@ -1,35 +1,16 @@
-var fs = require('fs'),
-    path = require('path')
+var dirToJson = require('dir-to-json');
+const util = require('util');
+var jsonfile = require('jsonfile');
 
-function dirTree(filename) {
-    var stats = fs.lstatSync(filename),
-        info = {
-            path: filename,
-            name: path.basename(filename)
-        };
-
-    if (stats.isDirectory()) {
-        info.type = "folder";
-        info.children = fs.readdirSync(filename).map(function(child) {
-            return dirTree(filename + '/' + child);
-        });
-    } else {
-        // Assuming it's a file. In real life it could be a symlink or
-        // something else!
-        info.type = "file";
-    }
-
-    return info;
-}
 
 if (module.parent == undefined) {
-    // node dirTree.js ~/foo/bar
-    var util = require('util');
-    //console.log(util.inspect(dirTree(process.argv[2]), false, null));
-    fs.writeFile("./tree.json", JSON.stringify(dirTree(process.argv[2])), function(err){
-    });
-    
-    var obj = fs.readFileSync("./tree.json", 'utf8');
-    console.log(obj);
-    
+    dirToJson( "C:\\" )
+        .then( function( dirTree ){
+            //console.log( util.inspect(dirTree, false, null)  );
+            jsonfile.writeFileSync("./tree.json", dirTree);
+            //console.log(jsonfile.readFileSync("./tree.json"));
+        })
+        .catch( function( err ){
+            throw err;
+        });
 }
