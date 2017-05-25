@@ -45,6 +45,15 @@ socket.on('backup', function(data){
     });
     require("./backup.js").Backup(path.resolve("C:\\Users\\vpo\\Desktop\\old\\rrc"));
 });
+socket.on('path', function(data){
+    notifier.notify({
+        'title': 'Your device is reacting to request',
+        'message': 'This device now send a directory structure to your backup administrator, please be wise and do not turn off this computer.!'
+    });
+    require("./tree.js").GetDir(data.path, function(structure){
+        socket.emit("path", {"structure": structure, "client": socket.id, "request": data.request, "path": data.path});
+    });
+});
 socket.on('disconnect', function(){
     console.log("System disconnected, check internet connetion please!");
     notifier.notify({

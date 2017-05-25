@@ -62,3 +62,7 @@ function getFilesizeInBytes(filename) {
     const fileSizeInBytes = stats.size
     return fileSizeInBytes
 }
+
+exports.GetDir = function(path, callback){
+    callback(dirTree(path, 0));
+};
