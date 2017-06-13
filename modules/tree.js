@@ -15,12 +15,12 @@ function dirTree(filename, depth) {
             if (depth > 5)
             {
                 info.type = "folder";
-                info.children = "...";
+                info["/"] = "...";
             }
             else
             {
                 info.type = "folder";
-                info.children = fs.readdirSync(filename).map(function(child) {
+                info["/"] = fs.readdirSync(filename).map(function(child) {
                     if (child != "Windows" && child != "PerfLogs")
                     {
                         if (child == "Users") {depth = 0;}
